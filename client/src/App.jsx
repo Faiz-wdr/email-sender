@@ -22,6 +22,7 @@ export default function App() {
   const [verifying, setVerifying] = useState(false);
   const [toast, setToast] = useState(null);
   const [wizardOpen, setWizardOpen] = useState(false);
+  const [localSending, setLocalSending] = useState(false);
 
   // Email Form States (Initialized empty, will load from localStorage)
   const [recipient, setRecipient] = useState('');
@@ -342,7 +343,14 @@ export default function App() {
     try {
       if (actionType === 'send_now') {
         showToast("Immediate transmission triggered.", "info");
-        await api.sendNow({ recipient, subject, body, isHtml });
+        setLocalSending(true);
+        try {
+          await api.sendNow({ recipient, subject, body, isHtml });
+          showToast("Send completed successfully!", "success");
+        } finally {
+          setLocalSending(false);
+          await fetchInitialData();
+        }
       }
     } catch (error) {
       showToast(error.message, "error");
@@ -464,7 +472,7 @@ export default function App() {
               onDeleteTemplate={handleDeleteTemplate}
               onSendNow={triggerSendNow}
               activeAccountsCount={activeAccountsCount}
-              sending={activeTask.status === 'sending'}
+              sending={activeTask.status === 'sending' || localSending}
             />
           </div>
         </div>

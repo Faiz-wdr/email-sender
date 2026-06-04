@@ -18,6 +18,14 @@ const PORT = process.env.PORT || 5995;
 app.use(cors());
 app.use(express.json());
 
+// Path rewrite middleware for Vercel deployment
+app.use((req, res, next) => {
+  if (req.url && req.url.startsWith('/api')) {
+    req.url = req.url.replace(/^\/api/, '');
+  }
+  next();
+});
+
 // Initialize Database on startup
 getDb().catch(err => {
   console.error("Failed to initialize database:", err);
@@ -414,9 +422,15 @@ app.post('/send/now', async (req, res) => {
   }
 
   try {
-    // Run immediate send
-    executeSend(true); // manual immediate send
-    res.json({ success: true, message: "Immediate send sequence initiated." });
+    if (process.env.VERCEL) {
+      // In serverless, we must await the sending before returning the response
+      // to ensure the lambda executes the send logic to completion
+      await executeSend(true);
+      res.json({ success: true, message: "Immediate send completed successfully." });
+    } else {
+      executeSend(true); // manual immediate send
+      res.json({ success: true, message: "Immediate send sequence initiated." });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -477,6 +491,10 @@ app.get('/logs', async (req, res) => {
 });
 
 // Start Server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
