@@ -185,22 +185,22 @@ export default function SmtpAccounts({
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       {/* Panel Header */}
-      <div className="p-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 bg-slate-50/50">
+      <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/50">
         <div>
           <h2 className="text-base font-semibold text-slate-900">SMTP Accounts</h2>
           <p className="text-xs text-slate-500">{accounts.length} account(s) loaded</p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 w-full sm:w-auto">
           <button
             onClick={onOpenWizard}
-            className="px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-md transition-all flex items-center gap-1.5 focus:outline-none"
+            className="px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-md transition-all flex items-center justify-center gap-1.5 focus:outline-none w-full sm:w-auto"
           >
             Setup Assistant
           </button>
           <button
             onClick={onVerifyAll}
             disabled={verifying || accounts.filter(a => a.enabled === 1).length === 0}
-            className="px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-md transition-all disabled:opacity-50 flex items-center gap-1.5 focus:outline-none"
+            className="px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-md transition-all disabled:opacity-50 flex items-center justify-center gap-1.5 focus:outline-none w-full sm:w-auto"
           >
             {verifying ? (
               <svg className="animate-spin h-3.5 w-3.5 text-indigo-700" fill="none" viewBox="0 0 24 24">
@@ -219,22 +219,22 @@ export default function SmtpAccounts({
               setShowImportForm(!showImportForm);
               setShowForm(false);
             }}
-            className="px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-md transition-all focus:outline-none"
+            className="col-span-2 sm:col-span-1 px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-md transition-all focus:outline-none w-full sm:w-auto text-center justify-center"
           >
             Import CSV
           </button>
-          <div className="inline-flex rounded-md shadow-sm">
+          <div className="col-span-2 sm:col-span-1 flex rounded-md shadow-sm w-full sm:w-auto">
             <button
               onClick={handleAddGmailPreset}
-              className="px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-l-md transition-all focus:outline-none"
+              className="flex-1 px-2.5 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 rounded-l-md transition-all focus:outline-none text-center justify-center"
             >
               Add Gmail
             </button>
             <button
               onClick={handleAddCustomPreset}
-              className="px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border-y border-r border-slate-200 hover:bg-slate-50 rounded-r-md transition-all focus:outline-none"
+              className="flex-1 px-2.5 py-1.5 text-xs font-semibold text-slate-700 bg-white border-y border-r border-slate-200 hover:bg-slate-50 rounded-r-md transition-all focus:outline-none text-center justify-center"
             >
-              Add Custom SMTP
+              Add Custom
             </button>
           </div>
         </div>
@@ -435,22 +435,106 @@ export default function SmtpAccounts({
             </button>
           </div>
         ) : (
-          <table className="min-w-full divide-y divide-slate-100">
-            <thead className="bg-slate-50">
-              <tr>
-                <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Email / Name</th>
-                <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Host</th>
-                <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
-                <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider hidden sm:table-cell">Last Verified</th>
-                <th className="px-4 py-2 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-slate-100">
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden md:block">
+              <table className="min-w-full divide-y divide-slate-100">
+                <thead className="bg-slate-50">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Email / Name</th>
+                    <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Host</th>
+                    <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                    <th className="px-4 py-2 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider hidden sm:table-cell">Last Verified</th>
+                    <th className="px-4 py-2 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-slate-100">
+                  {accounts.map((acc) => (
+                    <tr key={acc.id} className={`hover:bg-slate-50/50 ${acc.enabled === 0 ? 'opacity-65' : ''}`}>
+                      <td className="px-4 py-2.5 text-xs">
+                        <div className="flex items-center gap-2">
+                          {/* Inline enable toggle */}
+                          <label className="relative inline-flex items-center cursor-pointer scale-75">
+                            <input
+                              type="checkbox"
+                              checked={acc.enabled === 1}
+                              onChange={() => handleToggleEnabled(acc)}
+                              className="sr-only peer"
+                            />
+                            <div className="w-8 h-4.5 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-emerald-500"></div>
+                          </label>
+                          <div className="flex flex-col">
+                            <span className="font-semibold text-slate-800 break-all leading-snug">{acc.email}</span>
+                            <span className="text-[10px] text-slate-400 leading-tight">{acc.account_name}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-2.5 text-xs text-slate-655 font-mono break-all">
+                        {acc.host}:{acc.port} {acc.secure === 1 ? '(SSL)' : ''}
+                      </td>
+                      <td className="px-4 py-2.5 text-xs whitespace-nowrap">
+                        {getStatusBadge(acc)}
+                        {acc.verification_status === 'Failed Verification' && acc.error && (
+                          <div className="text-[9px] text-rose-500 font-medium max-w-[150px] truncate block mt-0.5" title={acc.error}>
+                            Err: {acc.error}
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-4 py-2.5 text-xs text-slate-500 font-mono hidden sm:table-cell">
+                        {acc.last_verified ? formatDateTime(acc.last_verified) : 'Never'}
+                      </td>
+                      <td className="px-4 py-2.5 text-right text-xs whitespace-nowrap space-x-1.5">
+                        <button
+                          onClick={() => onVerifySingle(acc.id)}
+                          disabled={acc.enabled === 0}
+                          className="px-2 py-0.5 border border-slate-200 text-indigo-700 hover:text-indigo-850 hover:bg-slate-50 bg-white rounded text-[10px] font-bold disabled:opacity-50 focus:outline-none"
+                        >
+                          Verify Again
+                        </button>
+                        <button
+                          onClick={() => handleStartEdit(acc)}
+                          className="text-slate-500 hover:text-indigo-650 font-medium focus:outline-none"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => onDelete(acc.id)}
+                          className="text-slate-450 hover:text-rose-655 font-medium focus:outline-none"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Card List View */}
+            <div className="block md:hidden grid grid-cols-1 sm:grid-cols-2 gap-3.5 p-3.5 bg-slate-50/20">
               {accounts.map((acc) => (
-                <tr key={acc.id} className={`hover:bg-slate-50/50 ${acc.enabled === 0 ? 'opacity-65' : ''}`}>
-                  <td className="px-4 py-2.5 text-xs">
-                    <div className="flex items-center gap-2">
-                      {/* Inline enable toggle */}
+                <div
+                  key={acc.id}
+                  className={`p-4 space-y-3 rounded-xl border transition-all ${
+                    acc.enabled === 0 
+                      ? 'bg-slate-50/40 opacity-75 border-slate-200 shadow-sm' 
+                      : 'bg-white border-slate-200 shadow-sm hover:shadow-md'
+                  }`}
+                >
+                  {/* Header: Email and Toggle */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex flex-col min-w-0">
+                      <span className="font-semibold text-slate-800 break-all text-xs">
+                        {acc.email}
+                      </span>
+                      <span className="text-[10px] text-slate-400">
+                        {acc.account_name}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span className="text-[10px] text-slate-400 font-semibold uppercase">
+                        {acc.enabled === 1 ? 'Enabled' : 'Disabled'}
+                      </span>
                       <label className="relative inline-flex items-center cursor-pointer scale-75">
                         <input
                           type="checkbox"
@@ -460,51 +544,63 @@ export default function SmtpAccounts({
                         />
                         <div className="w-8 h-4.5 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-emerald-500"></div>
                       </label>
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-slate-800 break-all leading-snug">{acc.email}</span>
-                        <span className="text-[10px] text-slate-400 leading-tight">{acc.account_name}</span>
-                      </div>
                     </div>
-                  </td>
-                  <td className="px-4 py-2.5 text-xs text-slate-650 font-mono break-all">
-                    {acc.host}:{acc.port} {acc.secure === 1 ? '(SSL)' : ''}
-                  </td>
-                  <td className="px-4 py-2.5 text-xs whitespace-nowrap">
-                    {getStatusBadge(acc)}
-                    {acc.verification_status === 'Failed Verification' && acc.error && (
-                      <div className="text-[9px] text-rose-500 font-medium max-w-[150px] truncate block mt-0.5" title={acc.error}>
-                        Err: {acc.error}
-                      </div>
-                    )}
-                  </td>
-                  <td className="px-4 py-2.5 text-xs text-slate-500 font-mono hidden sm:table-cell">
-                    {acc.last_verified ? formatDateTime(acc.last_verified) : 'Never'}
-                  </td>
-                  <td className="px-4 py-2.5 text-right text-xs whitespace-nowrap space-x-1.5">
+                  </div>
+
+                  {/* Connection Details Box */}
+                  <div className="grid grid-cols-2 gap-2 text-[10px] bg-slate-50 p-2.5 rounded border border-slate-100">
+                    <div className="col-span-2 min-[400px]:col-span-1">
+                      <span className="block text-slate-400 uppercase font-bold text-[8px] tracking-wider mb-0.5">Host Config</span>
+                      <span className="font-mono text-slate-700 break-all">
+                        {acc.host}:{acc.port} {acc.secure === 1 ? '(SSL)' : ''}
+                      </span>
+                    </div>
+                    <div className="col-span-2 min-[400px]:col-span-1">
+                      <span className="block text-slate-400 uppercase font-bold text-[8px] tracking-wider mb-0.5">Verification</span>
+                      <div className="inline-block">{getStatusBadge(acc)}</div>
+                    </div>
+                    <div className="col-span-2 border-t border-slate-200/60 pt-1.5 mt-1">
+                      <span className="block text-slate-405 uppercase font-bold text-[8px] tracking-wider mb-0.5">Last Checked</span>
+                      <span className="font-mono text-slate-650">
+                        {acc.last_verified ? formatDateTime(acc.last_verified) : 'Never'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Collapsible Verification Error */}
+                  {acc.verification_status === 'Failed Verification' && acc.error && (
+                    <div className="text-[10px] bg-rose-50 text-rose-800 p-2.5 rounded border border-rose-100 break-all leading-normal font-medium">
+                      <span className="font-bold text-rose-700 block mb-0.5">Verification Error:</span>
+                      {acc.error}
+                    </div>
+                  )}
+
+                  {/* Row Actions */}
+                  <div className="flex gap-2 justify-end pt-1">
                     <button
                       onClick={() => onVerifySingle(acc.id)}
                       disabled={acc.enabled === 0}
-                      className="px-2 py-0.5 border border-slate-200 text-indigo-700 hover:text-indigo-850 hover:bg-slate-50 bg-white rounded text-[10px] font-bold disabled:opacity-50 focus:outline-none"
+                      className="px-2.5 py-1 text-[10px] font-bold border border-slate-200 bg-white hover:bg-slate-50 text-indigo-700 rounded transition-all disabled:opacity-50 focus:outline-none"
                     >
                       Verify Again
                     </button>
                     <button
                       onClick={() => handleStartEdit(acc)}
-                      className="text-slate-500 hover:text-indigo-650 font-medium focus:outline-none"
+                      className="px-2.5 py-1 text-[10px] font-bold border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 rounded transition-all focus:outline-none"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => onDelete(acc.id)}
-                      className="text-slate-450 hover:text-rose-650 font-medium focus:outline-none"
+                      className="px-2.5 py-1 text-[10px] font-bold border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-650 rounded transition-all focus:outline-none"
                     >
                       Delete
                     </button>
-                  </td>
-                </tr>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </>
         )}
       </div>
     </div>

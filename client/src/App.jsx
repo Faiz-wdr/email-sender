@@ -7,7 +7,6 @@ import LogsTable from './components/LogsTable.jsx';
 import ConfirmationModal from './components/ConfirmationModal.jsx';
 import Toast from './components/Toast.jsx';
 import SmtpWizard from './components/SmtpWizard.jsx';
-import SmtpHelp from './components/SmtpHelp.jsx';
 
 export default function App() {
   // Navigation & Layout States
@@ -18,12 +17,12 @@ export default function App() {
   const [accounts, setAccounts] = useState([]);
   const [templates, setTemplates] = useState([]);
   const [logs, setLogs] = useState([]);
-  
+
   // Loading & Action States
   const [verifying, setVerifying] = useState(false);
   const [toast, setToast] = useState(null);
   const [wizardOpen, setWizardOpen] = useState(false);
-  
+
   // Email Form States (Initialized empty, will load from localStorage)
   const [recipient, setRecipient] = useState('');
   const [subject, setSubject] = useState('');
@@ -367,9 +366,9 @@ export default function App() {
       {/* Navigation Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <span className="text-xl">✉️</span>
+          {/* <span className="text-xl">✉️</span> */}
           <div>
-            <h1 className="text-sm font-bold text-slate-800 tracking-tight leading-none">SMTP Multi-Sender</h1>
+            <h1 className="text-sm font-bold text-slate-800 tracking-tight leading-none">Multi-Sender</h1>
             <span className="text-[10px] text-slate-400 font-medium font-mono uppercase">Precision Exam Tool</span>
           </div>
         </div>
@@ -406,7 +405,7 @@ export default function App() {
             onClick={() => setDrawerOpen(false)}
             className="fixed inset-0 bg-slate-900/30 backdrop-blur-xs"
           ></div>
-          
+
           {/* Drawer Panel */}
           <div className="relative w-64 max-w-xs bg-white h-full shadow-xl flex flex-col p-4 z-10 border-r border-slate-100">
             <div className="flex justify-between items-center pb-3 border-b border-slate-100 mb-4">
@@ -430,7 +429,7 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-4 lg:p-6 space-y-4">
-        
+
         {/* Row 1: Accounts and Configurations */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
           {/* SMTP Accounts */}
@@ -447,7 +446,6 @@ export default function App() {
               onOpenWizard={() => setWizardOpen(true)}
               verifying={verifying}
             />
-            <SmtpHelp />
           </div>
 
           {/* Email Payload Configuration */}
