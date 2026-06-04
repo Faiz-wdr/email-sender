@@ -1,12 +1,16 @@
 {
   "name": "email-sender-root",
   "version": "1.0.0",
+  "private": true,
   "type": "module",
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "scripts": {
-    "postinstall": "npm install --prefix client && npm install --prefix server",
-    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
-    "start": "concurrently \"npm run start --prefix server\" \"npm run preview --prefix client\"",
-    "build": "npm run build --prefix client"
+    "dev": "concurrently \"npm run dev -w server\" \"npm run dev -w client\"",
+    "start": "concurrently \"npm run start -w server\" \"npm run preview -w client\"",
+    "build": "npm run build -w client"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
